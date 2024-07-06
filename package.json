@@ -8,9 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier '**/*.{ts,tsx}' --write",
-    "prepare": "husky"
+    "prepare": "husky && husky install"
   },
   "dependencies": {
+    "@clerk/nextjs": "^5.2.2",
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -36,6 +37,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "husky": "^8.0.0"
   }
 }
