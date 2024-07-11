@@ -1,7 +1,12 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { NavButton } from "./nav-button";
+import { useMedia } from "react-use";
+import { useState } from "react";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { Button } from "./ui/button";
+import { Menu } from "lucide-react";
 
 const routes = [
   { href: "/", label: "Overview" },
@@ -12,7 +17,47 @@ const routes = [
 ];
 
 export const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { push } = useRouter();
   const pathname = usePathname();
+  const isMobile = useMedia("(max-width: 1024px)", false);
+
+  const reroute = (href: string) => {
+    push(href);
+    setIsOpen(false);
+  };
+
+  if (isMobile)
+    return (
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger>
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-none bg-white/10 font-normal text-white outline-none transition hover:bg-white/20 hover:text-white focus:bg-white/30 focus-visible:ring-transparent focus-visible:ring-offset-0"
+          >
+            <Menu className="size-4" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="px-2">
+          <nav className="flex flex-col gap-y-2 pt-6">
+            <ul className="flex flex-col">
+              {routes.map(({ href, label }) => (
+                <Button
+                  key={label}
+                  variant={pathname == href ? "secondary" : "ghost"}
+                  onClick={() => reroute(href)}
+                >
+                  {label}
+                </Button>
+              ))}
+            </ul>
+          </nav>
+        </SheetContent>
+      </Sheet>
+    );
+
   return (
     <nav>
       <ul className="hidden items-center gap-x-2 overflow-x-auto lg:flex">
