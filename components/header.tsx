@@ -1,5 +1,9 @@
+import { ClerkLoaded, ClerkLoading, SignOutButton } from "@clerk/nextjs";
 import { HeaderLogo } from "./header-logo";
 import { Navbar } from "./navbar";
+import { Button } from "./ui/button";
+import { Loader2 } from "lucide-react";
+import { WelcomeMsg } from "./welcome-msg";
 
 export const Header = () => {
   return (
@@ -10,7 +14,16 @@ export const Header = () => {
             <HeaderLogo />
             <Navbar />
           </div>
+          <ClerkLoaded>
+            <SignOutButton redirectUrl="/login">
+              <Button variant="destructive">Sign out</Button>
+            </SignOutButton>
+          </ClerkLoaded>
+          <ClerkLoading>
+            <Loader2 className="size-8 animate-spin text-slate-400" />
+          </ClerkLoading>
         </div>
+        <WelcomeMsg />
       </div>
     </header>
   );
