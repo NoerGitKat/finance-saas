@@ -1,26 +1,16 @@
-import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
-import { Context, Hono } from "hono";
-import { BlankEnv, BlankInput } from "hono/types";
+import { Hono } from "hono";
+
 import { handle } from "hono/vercel";
 
 export const runtime = "edge";
 
+import accounts from "./accounts";
+
 const app = new Hono().basePath("/api");
 
-app.get(
-  "/hello",
-  clerkMiddleware(),
-  (context: Context<BlankEnv, "/api/hello", BlankInput>) => {
-    const auth = getAuth(context);
-
-    if (!auth?.userId) return context.json({ error: "Unauthorized" });
-
-    return context.json({
-      message: "Hello Next.js!",
-      userId: auth.userId,
-    });
-  },
-);
+const routes = app.route("/accounts", accounts);
 
 export const GET = handle(app);
 export const POST = handle(app);
+
+export type AppType = typeof routes;
