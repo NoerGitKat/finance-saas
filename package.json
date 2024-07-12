@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier '**/*.{ts,tsx}' --write",
+    "db:generate": "drizzle-kit generate --dialect=postgresql --schema=db/schema --out=./drizzle",
+    "db:migrate": "bun ./scripts/migrate.ts",
+    "db:studio": "drizzle-kit studio",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -15,10 +18,12 @@
     "@clerk/nextjs": "^5.2.2",
     "@hono/clerk-auth": "^2.0.0",
     "@hono/zod-validator": "^0.2.2",
+    "@neondatabase/serverless": "^0.9.4",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.32.0",
     "hono": "^4.4.12",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",
@@ -35,16 +40,18 @@
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
+    "dotenv": "^16.4.5",
+    "drizzle-kit": "^0.23.0",
     "eslint": "^8",
     "eslint-config-next": "^14.2.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^8.0.0",
     "lint-staged": "^15.2.2",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5",
-    "husky": "^8.0.0"
+    "typescript": "^5"
   }
 }
