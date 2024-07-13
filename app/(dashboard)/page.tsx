@@ -2,11 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import useGetAccounts from "@/features/accounts/api/use-get-accounts";
+import { useNewAccount } from "@/features/accounts/hooks/use-new-account";
 import { SignOutButton } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
 
 export default function Home() {
   const { data, isLoading } = useGetAccounts();
+  const { toggleSheet } = useNewAccount();
 
   if (isLoading) {
     return (
@@ -19,6 +21,7 @@ export default function Home() {
   return (
     <>
       <p>This is an auth route</p>
+      <Button onClick={toggleSheet}>Create new account sheet</Button>
       <div>
         {data?.accounts && data.accounts.length > 0
           ? data.accounts.map((account) => (
