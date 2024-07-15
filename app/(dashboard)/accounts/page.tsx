@@ -8,10 +8,14 @@ import { Loader2, Plus } from "lucide-react";
 import { columns } from "@/app/(dashboard)/accounts/columns";
 import useGetAccounts from "@/features/accounts/api/use-get-accounts";
 import { Skeleton } from "@/components/ui/skeleton";
+import useBulkDelete from "@/features/accounts/api/use-bulk-delete";
 
 const AccountsPage = () => {
   const { toggleSheet } = useNewAccount();
   const { data, isLoading } = useGetAccounts();
+  const { mutate, isPending } = useBulkDelete();
+
+  const isDisabled = isLoading || isPending;
 
   return (
     <section className="mx-auto -mt-24 w-full max-w-screen-2xl pb-10">
@@ -43,8 +47,11 @@ const AccountsPage = () => {
                   columns={columns}
                   data={data.accounts}
                   filterKey="name"
-                  deleteRows={() => {}}
-                  disabled={false}
+                  onDelete={(row) => {
+                    const ids = row.map((account) => account.original.id);
+                    mutate({ ids });
+                  }}
+                  disabled={isDisabled}
                 />
               )}
             </CardContent>
