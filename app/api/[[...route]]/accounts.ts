@@ -18,6 +18,8 @@ const app = new Hono()
       .select({
         id: accounts.id,
         name: accounts.name,
+        plaidId: accounts.plaidId,
+        userId: accounts.userId,
       })
       .from(accounts)
       .where(eq(accounts.userId, auth.userId));
