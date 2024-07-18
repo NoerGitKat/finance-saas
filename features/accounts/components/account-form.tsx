@@ -66,7 +66,7 @@ export const AccountForm = ({
         </Button>
         {id ? (
           <Button variant="destructive" disabled={disabled} onClick={onDelete}>
-            <Trash className="size-4" />
+            <Trash className="mr-2 size-4" />
             Delete account
           </Button>
         ) : null}

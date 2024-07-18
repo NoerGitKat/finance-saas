@@ -5,6 +5,7 @@ import { Account } from "@/db/schema";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import { TableActions } from "./table-actions";
 
 export const columns: ColumnDef<Account>[] = [
   {
@@ -55,4 +56,5 @@ export const columns: ColumnDef<Account>[] = [
     accessorKey: "userId",
     header: "User ID",
   },
+  { id: "actions", cell: ({ row }) => <TableActions id={row.original.id} /> },
 ];

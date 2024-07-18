@@ -27,6 +27,43 @@ const app = new Hono()
 
     return context.json({ accounts: data || [] }, 200);
   })
+  .get(
+    "/:id",
+    clerkMiddleware(),
+    zValidator(
+      "param",
+      z.object({
+        id: z.string().optional(),
+      }),
+    ),
+    async (context) => {
+      const auth = getAuth(context);
+      const { id } = context.req.valid("param");
+
+      if (!id) {
+        return context.json({ error: "Missing account ID" }, 400);
+      }
+      if (!auth?.userId) {
+        return context.json({ error: "Unauthorized" }, 401);
+      }
+      const [account] = await db
+        .selectDistinct({
+          id: accounts.id,
+          name: accounts.name,
+          plaidId: accounts.plaidId,
+          userId: accounts.userId,
+        })
+        .from(accounts)
+        .where(and(eq(accounts.userId, auth.userId), eq(accounts.id, id)));
+
+      if (!account)
+        return context.json(
+          { error: "No account associated with this ID" },
+          404,
+        );
+      return context.json({ data: account }, 200);
+    },
+  )
   .post(
     "/",
     clerkMiddleware(),

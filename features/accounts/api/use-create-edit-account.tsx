@@ -7,7 +7,7 @@ import { CircleX, CircleCheck } from "lucide-react";
 type ResponseType = InferResponseType<typeof client.api.accounts.$post>;
 type RequestType = InferRequestType<typeof client.api.accounts.$post>["json"];
 
-const useCreateAccount = () => {
+const useCreateorEditAccount = (id?: string) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
@@ -16,13 +16,16 @@ const useCreateAccount = () => {
       return await response.json();
     },
     onSuccess: (_data, { name }) => {
-      toast.success(`Successfully created account: ${name}!`, {
-        icon: <CircleCheck color="green" />,
-      });
+      toast.success(
+        `Successfully ${id ? "edited" : "created"} account: ${name}!`,
+        {
+          icon: <CircleCheck color="green" />,
+        },
+      );
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
     },
     onError: () => {
-      toast.error("Couldn't create account...", {
+      toast.error(`Couldn't ${id ? "edit" : "create"} account...`, {
         icon: <CircleX color="red" />,
       });
     },
@@ -31,4 +34,4 @@ const useCreateAccount = () => {
   return mutation;
 };
 
-export default useCreateAccount;
+export default useCreateorEditAccount;

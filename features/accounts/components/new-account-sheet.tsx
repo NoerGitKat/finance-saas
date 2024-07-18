@@ -7,12 +7,15 @@ import {
 } from "@/components/ui/sheet";
 import { useNewAccount } from "@/features/accounts/hooks/use-new-account";
 import { AccountForm, FormValues } from "./account-form";
-import useCreateAccount from "@/features/accounts/api/use-create-account";
+import useCreateorEditAccount from "@/features/accounts/api/use-create-edit-account";
 
 export const NewAccountSheet = () => {
   const { isOpen, toggleSheet } = useNewAccount();
 
-  const mutation = useCreateAccount();
+  const defaultValues = {
+    name: "",
+  };
+  const mutation = useCreateorEditAccount();
 
   const createNewAccount = (values: FormValues) => {
     mutation.mutate(values, {
@@ -34,9 +37,7 @@ export const NewAccountSheet = () => {
         <AccountForm
           onSubmit={createNewAccount}
           disabled={mutation.isPending}
-          defaultValues={{
-            name: "",
-          }}
+          defaultValues={defaultValues}
         />
       </SheetContent>
     </Sheet>
