@@ -4,14 +4,33 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
 import { CircleX, CircleCheck } from "lucide-react";
 
-type ResponseType = InferResponseType<typeof client.api.accounts.$post>;
-type RequestType = InferRequestType<typeof client.api.accounts.$post>["json"];
+type CreateResponseType = InferResponseType<typeof client.api.accounts.$post>;
+type CreateRequestType = InferRequestType<
+  typeof client.api.accounts.$post
+>["json"];
+type EditResponseType = InferResponseType<
+  (typeof client.api.accounts)[":id"]["$patch"]
+>;
+type EditRequestType = InferRequestType<
+  typeof client.api.accounts.$post
+>["json"];
 
 const useCreateorEditAccount = (id?: string) => {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<ResponseType, Error, RequestType>({
+  const mutation = useMutation<
+    CreateResponseType | EditResponseType,
+    Error,
+    CreateRequestType | EditRequestType
+  >({
     mutationFn: async (json) => {
+      if (id) {
+        const response = await client.api.accounts[":id"]["$patch"]({
+          param: { id },
+          json,
+        });
+        return await response.json();
+      }
       const response = await client.api.accounts.$post({ json });
       return await response.json();
     },
