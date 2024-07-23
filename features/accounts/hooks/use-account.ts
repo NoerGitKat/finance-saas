@@ -8,7 +8,7 @@ type AccountState = {
 };
 
 export const useAccount = create<AccountState>((set) => ({
-  id: undefined,
+  id: "",
   isOpen: false,
   openModal: (id: string) =>
     set((prevState) => ({ isOpen: !prevState.isOpen, id })),

@@ -147,6 +147,31 @@ const app = new Hono()
         return context.json({ error: "Couldn't update account..." }, 304);
       }
     },
-  );
+  )
+  .delete(
+    "/:id",
+    clerkMiddleware(),
+    zValidator("param", z.object({ id: z.string().optional() })),
+    async (context) => {
+      const auth = getAuth(context);
+      const { id } = context.req.valid("param");
 
+      if (!auth?.userId) return context.json({ error: "Unauthorized" }, 401);
+      if (!id) return context.json({ error: "Missing account ID." }, 400);
+
+      try {
+        const [data] = await db
+          .delete(accounts)
+          .where(and(eq(accounts.userId, auth.userId), eq(accounts.id, id)))
+          .returning({ id: accounts.id, name: accounts.name });
+
+        if (!data)
+          return context.json({ error: "Couldn't find account..." }, 404);
+
+        return context.json(data, 200);
+      } catch (error) {
+        return context.json({ error: "Couldn't update account..." }, 304);
+      }
+    },
+  );
 export default app;

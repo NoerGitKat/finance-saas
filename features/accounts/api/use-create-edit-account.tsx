@@ -41,6 +41,9 @@ const useCreateorEditAccount = (id?: string) => {
           icon: <CircleCheck color="green" />,
         },
       );
+      if (id) {
+        queryClient.invalidateQueries({ queryKey: ["account", { id }] });
+      }
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
     },
     onError: () => {

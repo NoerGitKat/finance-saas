@@ -64,12 +64,17 @@ export const AccountForm = ({
         <Button variant="default" disabled={disabled}>
           {id ? "Save changes" : "Create account"}
         </Button>
-        {id ? (
-          <Button variant="destructive" disabled={disabled} onClick={onDelete}>
+        {!!id && (
+          <Button
+            type="button"
+            variant="destructive"
+            disabled={disabled}
+            onClick={onDelete}
+          >
             <Trash className="mr-2 size-4" />
             Delete account
           </Button>
-        ) : null}
+        )}
       </form>
     </Form>
   );
