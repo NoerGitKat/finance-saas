@@ -15,6 +15,13 @@
       "when": 1720781753470,
       "tag": "0001_stiff_ghost_rider",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1721744461001,
+      "tag": "0002_same_chronomancer",
+      "breakpoints": true
     }
   ]
 }
