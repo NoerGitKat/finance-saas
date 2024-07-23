@@ -3,16 +3,16 @@
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useNewAccount } from "@/features/accounts/hooks/use-new-account";
-import { BadgeEuro, Loader2, Plus } from "lucide-react";
-import { columns } from "@/app/(dashboard)/accounts/columns";
-import useGetAccounts from "@/features/accounts/api/use-get-accounts";
+import { useNewCategory } from "@/features/categories/hooks/use-new-category";
+import { Loader2, Plus, Tags } from "lucide-react";
+import { columns } from "@/app/(dashboard)/categories/columns";
+import useGetCategories from "@/features/categories/api/use-get-categories";
 import { Skeleton } from "@/components/ui/skeleton";
-import useBulkDelete from "@/features/accounts/api/use-bulk-delete";
+import useBulkDelete from "@/features/categories/api/use-bulk-delete";
 
-const AccountsPage = () => {
-  const { toggleSheet } = useNewAccount();
-  const { data, isLoading } = useGetAccounts();
+const CategoriesPage = () => {
+  const { toggleSheet } = useNewCategory();
+  const { data, isLoading } = useGetCategories();
   const { mutate, isPending } = useBulkDelete();
 
   const isDisabled = isLoading || isPending;
@@ -35,20 +35,21 @@ const AccountsPage = () => {
           <>
             <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
               <CardTitle className="line-clamp-1 flex text-xl">
-                <BadgeEuro className="mr-2" /> Current Accounts
+                <Tags className="mr-2" />
+                Categories
               </CardTitle>
               <Button onClick={toggleSheet} size="sm">
-                <Plus className="mr-2 size-4" /> Create new account
+                <Plus className="mr-2 size-4" /> Create new category
               </Button>
             </CardHeader>
             <CardContent>
               {data && (
                 <DataTable
                   columns={columns}
-                  data={data.accounts}
+                  data={data.categories}
                   filterKey="name"
                   onDelete={(row) => {
-                    const ids = row.map((account) => account.original.id);
+                    const ids = row.map((category) => category.original.id);
                     mutate({ ids });
                   }}
                   disabled={isDisabled}
@@ -62,4 +63,4 @@ const AccountsPage = () => {
   );
 };
 
-export default AccountsPage;
+export default CategoriesPage;

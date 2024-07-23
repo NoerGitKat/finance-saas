@@ -5,10 +5,13 @@ import { handle } from "hono/vercel";
 export const runtime = "edge";
 
 import accounts from "./accounts";
+import categories from "./categories";
 
 const app = new Hono().basePath("/api");
 
-const routes = app.route("/accounts", accounts);
+const routes = app
+  .route("/accounts", accounts)
+  .route("/categories", categories);
 
 export const GET = handle(app);
 export const POST = handle(app);
