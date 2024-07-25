@@ -11,8 +11,8 @@ const useGetCategories = () => {
         throw new Error("Failed to fetch categories!");
       }
 
-      const data = await response.json();
-      return data;
+      const { categories } = await response.json();
+      return categories;
     },
   });
 

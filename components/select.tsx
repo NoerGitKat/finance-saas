@@ -43,6 +43,7 @@ export const Select = ({
       }}
       value={formattedValue}
       isDisabled={disabled}
+      options={options}
       placeholder={placeholder}
       onCreateOption={createAccountOption}
       onChange={selectOption}

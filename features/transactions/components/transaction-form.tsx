@@ -8,10 +8,10 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import { insertTransactionSchema } from "@/db/schema/transactions";
+import { Select } from "@/components/select";
 
 const formSchema = z.object({
   date: z.coerce.date(),
@@ -34,6 +34,16 @@ type Props = {
   defaultValues?: FormValues;
   onSubmit: (values: ApiFormValues) => void;
   onDelete?: () => void;
+  categoryOptions: {
+    label: string;
+    value: string;
+  }[];
+  accountOptions: {
+    label: string;
+    value: string;
+  }[];
+  createNewCategory: (name: string) => void;
+  createNewAccount: (name: string) => void;
   disabled?: boolean;
 };
 
@@ -42,6 +52,10 @@ export const TransactionForm = ({
   defaultValues,
   onSubmit,
   onDelete,
+  categoryOptions,
+  accountOptions,
+  createNewCategory,
+  createNewAccount,
   disabled,
 }: Props) => {
   const form = useForm<FormValues>({
@@ -56,32 +70,38 @@ export const TransactionForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
-          name="receiver"
+          name="accountId"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Receiver</FormLabel>
+              <FormLabel>Account</FormLabel>
               <FormControl>
-                <Input
+                <Select
+                  placeholder="Select an account"
+                  options={accountOptions}
+                  createAccountOption={createNewAccount}
+                  value={field.value}
                   disabled={disabled}
-                  placeholder="e.g. leisure, business, investment"
-                  {...field}
+                  changeOption={() => {}}
                 />
               </FormControl>
             </FormItem>
           )}
         />
         <FormField
-          name="amount"
+          name="categoryId"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel>Category</FormLabel>
               <FormControl>
-                <Input
+                <Select
+                  placeholder="Select a category"
+                  options={categoryOptions}
+                  createAccountOption={createNewCategory}
+                  value={field.value}
                   disabled={disabled}
-                  placeholder="e.g. leisure, business, investment"
-                  {...field}
+                  changeOption={() => {}}
                 />
               </FormControl>
             </FormItem>
