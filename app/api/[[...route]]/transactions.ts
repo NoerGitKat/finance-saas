@@ -97,7 +97,7 @@ const app = new Hono()
       if (!data)
         return context.json({ error: "Couldn't find transaction." }, 404);
 
-      return context.json({ transactions: data || [] }, 200);
+      return context.json({ transaction: data || [] }, 200);
     },
   )
   .post(
@@ -124,6 +124,35 @@ const app = new Hono()
             id: createId(),
             ...values,
           })
+          .returning();
+
+        return context.json({ transactions: data }, 201);
+      } catch (error) {
+        return context.json({ error }, 400);
+      }
+    },
+  )
+  .post(
+    "/bulk-create",
+    clerkMiddleware(),
+    zValidator("json", z.array(insertTransactionSchema.omit({ id: true }))),
+    async (context) => {
+      const auth = getAuth(context);
+      const values = context.req.valid("json");
+
+      if (!auth?.userId) return context.json({ error: "Unauthorized" }, 401);
+      if (!values)
+        return context.json({ error: "No transactions to be added" }, 422);
+
+      try {
+        const data = await db
+          .insert(transactions)
+          .values(
+            values.map((value) => ({
+              id: createId(),
+              ...value,
+            })),
+          )
           .returning();
 
         return context.json({ transactions: data }, 201);
