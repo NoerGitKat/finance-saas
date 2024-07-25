@@ -41,6 +41,7 @@ const app = new Hono()
         .select({
           id: transactions.id,
           date: transactions.date,
+          amount: transactions.amount,
           category: categories.name,
           categoryId: transactions.categoryId,
           receiver: transactions.receiver,
