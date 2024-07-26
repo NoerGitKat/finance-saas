@@ -14,13 +14,14 @@ import useCreateorEditAccount from "@/features/accounts/api/use-create-edit-acco
 import useGetCategories from "@/features/categories/api/use-get-categories";
 import { Loader2 } from "lucide-react";
 import useGetAccounts from "@/features/accounts/api/use-get-accounts";
+import { convertAmountToMiliunits } from "@/lib/utils";
 
 export const NewTransactionSheet = () => {
   const { isOpen, toggleSheet } = useNewTransaction();
 
   const defaultValues = {
     receiver: "",
-    amount: 0,
+    amount: "0.00",
     date: new Date(),
     accountId: "",
   };
@@ -44,7 +45,15 @@ export const NewTransactionSheet = () => {
   const transactionMutation = useCreateorEditTransaction();
 
   const createNewTransaction = (values: ApiFormValues) => {
-    transactionMutation.mutate(values, {
+    const amount = parseFloat(values.amount.toString());
+    const amountInMiliunits = convertAmountToMiliunits(amount);
+
+    const formValues = {
+      ...values,
+      amount: amountInMiliunits,
+    };
+
+    transactionMutation.mutate(formValues, {
       onSuccess: () => {
         toggleSheet();
       },

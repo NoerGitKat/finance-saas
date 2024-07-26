@@ -6,10 +6,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { TableActions } from "./table-actions";
+import { format } from "date-fns";
+import { convertAmountFromMiliunits } from "@/lib/utils";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
-    id: "select",
+    id: "transactions",
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -31,43 +33,45 @@ export const columns: ColumnDef<Transaction>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "date",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          ID
+          Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return <span>{format(row.original.date, "MM/dd/yyyy")}</span>;
+    },
   },
-  // {
-  //   accessorKey: "date",
-  //   header: "Date",
-  // },
-  // {
-  //   accessorKey: "receiver",
-  //   header: "Receiver",
-  // },
-  // {
-  //   accessorKey: "amount",
-  //   header: "Amount",
-  // },
-  // {
-  //   accessorKey: "notes",
-  //   header: "Notes",
-  // },
-  // {
-  //   accessorKey: "category",
-  //   header: "Category",
-  // },
+  {
+    accessorKey: "receiver",
+    header: "Receiver",
+  },
+  {
+    accessorKey: "amount",
+    header: "Amount",
+    cell: ({ row }) => {
+      return <span>${convertAmountFromMiliunits(row.original.amount)}</span>;
+    },
+  },
+  {
+    accessorKey: "notes",
+    header: "Notes",
+  },
+  {
+    accessorKey: "category",
+    header: "Category",
+  },
 
-  // {
-  //   accessorKey: "account",
-  //   header: "Account",
-  // },
+  {
+    accessorKey: "account",
+    header: "Account",
+  },
   { id: "actions", cell: ({ row }) => <TableActions id={row.original.id} /> },
 ];

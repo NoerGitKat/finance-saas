@@ -12,13 +12,17 @@ import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import { insertTransactionSchema } from "@/db/schema/transactions";
 import { Select } from "@/components/select";
+import { DatePicker } from "@/components/date-picker";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { AmountInput } from "@/components/amount-input";
 
 const formSchema = z.object({
   date: z.coerce.date(),
   accountId: z.string(),
   categoryId: z.string().nullable().optional(),
   receiver: z.string(),
-  amount: z.number(),
+  amount: z.string(),
   notes: z.string().nullable().optional(),
 });
 
@@ -70,6 +74,38 @@ export const TransactionForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
+          name="receiver"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Receiver</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Add a receiver"
+                  disabled={disabled}
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="amount"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <AmountInput
+                  {...field}
+                  disabled={disabled}
+                  placeholder="0.00"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
           name="accountId"
           control={form.control}
           render={({ field }) => (
@@ -82,7 +118,7 @@ export const TransactionForm = ({
                   createAccountOption={createNewAccount}
                   value={field.value}
                   disabled={disabled}
-                  changeOption={() => {}}
+                  changeOption={field.onChange}
                 />
               </FormControl>
             </FormItem>
@@ -101,7 +137,40 @@ export const TransactionForm = ({
                   createAccountOption={createNewCategory}
                   value={field.value}
                   disabled={disabled}
-                  changeOption={() => {}}
+                  changeOption={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="date"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Date</FormLabel>
+              <FormControl>
+                <DatePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={false}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />{" "}
+        <FormField
+          name="notes"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  value={field.value ?? ""}
+                  disabled={disabled}
+                  placeholder="Add notes (optional)"
                 />
               </FormControl>
             </FormItem>
