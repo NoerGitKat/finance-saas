@@ -31,6 +31,7 @@ const useCreateorEditTransaction = (id?: string) => {
           param: { id },
           json,
         });
+
         return await response.json();
       }
       const response = await client.api.transactions.$post({ json });
@@ -48,7 +49,8 @@ const useCreateorEditTransaction = (id?: string) => {
       }
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
-    onError: () => {
+    onError: (error) => {
+      console.log("error is", error);
       toast.error(`Couldn't ${id ? "edit" : "create"} transaction...`, {
         icon: <CircleX color="red" />,
       });

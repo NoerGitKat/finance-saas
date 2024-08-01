@@ -12,5 +12,5 @@ export const useTransaction = create<TransactionState>((set) => ({
   isOpen: false,
   openModal: (id: string) =>
     set((prevState) => ({ isOpen: !prevState.isOpen, id })),
-  closeModal: () => set({ isOpen: false, id: undefined }),
+  closeModal: () => set({ isOpen: false, id: "" }),
 }));

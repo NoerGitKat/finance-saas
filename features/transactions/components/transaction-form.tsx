@@ -35,7 +35,7 @@ export type ApiFormValues = z.input<typeof apiSchema>;
 
 type Props = {
   id?: string;
-  defaultValues?: FormValues;
+  defaultValues?: ApiFormValues;
   onSubmit: (values: ApiFormValues) => void;
   onDelete?: () => void;
   categoryOptions: {
@@ -62,7 +62,7 @@ export const TransactionForm = ({
   createNewAccount,
   disabled,
 }: Props) => {
-  const form = useForm<FormValues>({
+  const form = useForm<ApiFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
@@ -81,9 +81,9 @@ export const TransactionForm = ({
               <FormLabel>Receiver</FormLabel>
               <FormControl>
                 <Input
+                  {...field}
                   placeholder="Add a receiver"
                   disabled={disabled}
-                  {...field}
                 />
               </FormControl>
             </FormItem>
@@ -100,6 +100,7 @@ export const TransactionForm = ({
                   {...field}
                   disabled={disabled}
                   placeholder="0.00"
+                  value={field.value.toString()}
                 />
               </FormControl>
             </FormItem>

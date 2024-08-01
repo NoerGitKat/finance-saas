@@ -12,3 +12,15 @@ export function convertAmountFromMiliunits(amount: number) {
 export function convertAmountToMiliunits(amount: number) {
   return Math.round(amount * 1000);
 }
+
+export function formatCurrency(value: number, isMiliunit?: boolean) {
+  let amount = value;
+  if (isMiliunit) {
+    amount = convertAmountFromMiliunits(value);
+  }
+  return Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 2,
+  }).format(amount);
+}

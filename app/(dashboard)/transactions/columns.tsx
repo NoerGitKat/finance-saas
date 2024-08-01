@@ -7,7 +7,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { TableActions } from "./table-actions";
 import { format } from "date-fns";
-import { convertAmountFromMiliunits } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { AccountColumn } from "./account-column";
+import { CategoryColumn } from "./category-column";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -57,21 +60,44 @@ export const columns: ColumnDef<Transaction>[] = [
     accessorKey: "amount",
     header: "Amount",
     cell: ({ row }) => {
-      return <span>${convertAmountFromMiliunits(row.original.amount)}</span>;
+      return (
+        <Badge
+          className={row.original.amount < 0 ? "bg-rose-400" : "bg-emerald-400"}
+        >
+          {formatCurrency(row.original.amount, true)}
+        </Badge>
+      );
     },
   },
-  {
-    accessorKey: "notes",
-    header: "Notes",
-  },
+
   {
     accessorKey: "category",
     header: "Category",
+    cell: ({ row }) => {
+      return (
+        <CategoryColumn
+          category={row.original.category}
+          categoryId={row.original.categoryId}
+        />
+      );
+    },
   },
 
   {
     accessorKey: "account",
     header: "Account",
+    cell: ({ row }) => {
+      return (
+        <AccountColumn
+          account={row.original.account}
+          accountId={row.original.accountId}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "notes",
+    header: "Notes",
   },
   { id: "actions", cell: ({ row }) => <TableActions id={row.original.id} /> },
 ];

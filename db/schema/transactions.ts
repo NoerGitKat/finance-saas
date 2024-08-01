@@ -35,5 +35,8 @@ export const insertTransactionSchema = createInsertSchema(transactions, {
   date: z.coerce.date(),
 });
 
-export type Transaction = typeof transactions.$inferSelect;
+export type Transaction = typeof transactions.$inferSelect & {
+  account: string;
+  category: string;
+};
 export type NewTransaction = typeof transactions.$inferInsert;

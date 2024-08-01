@@ -45,6 +45,7 @@ const useCreateorEditAccount = (id?: string) => {
         queryClient.invalidateQueries({ queryKey: ["account", { id }] });
       }
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
     onError: () => {
       toast.error(`Couldn't ${id ? "edit" : "create"} account...`, {
