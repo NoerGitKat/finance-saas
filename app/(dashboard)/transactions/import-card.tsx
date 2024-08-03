@@ -40,9 +40,9 @@ export const ImportCard = ({ data, cancelImport, importFile }: Props) => {
         }
       }
 
-      // if (value === "skip") {
-      //   value = null;
-      // }
+      if (value === "skip") {
+        value = null;
+      }
 
       newSelectedColumns[`column_${columnIndex}`] = value;
 

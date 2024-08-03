@@ -20,8 +20,6 @@ const TransactionsPage = () => {
   const { mutate, isPending } = useBulkDeleteTransactions();
   const { variant, uploadCSV, importResults, cancelImport } = useImportCSV();
 
-  console.log("importResults", importResults);
-
   if (variant === Variants.IMPORT)
     return (
       <section className="mx-auto -mt-24 w-full max-w-screen-2xl pb-10">

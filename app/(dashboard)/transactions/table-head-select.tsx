@@ -31,12 +31,10 @@ export const TableHeadSelect = ({
       <SelectTrigger
         className={cn(
           "border-none bg-transparent capitalize outline-none focus:ring-transparent focus:ring-offset-0",
-          currentSelection && currentSelection !== "skip" && "text-emerald-500",
+          currentSelection && "text-emerald-500",
         )}
       >
-        {currentSelection && currentSelection !== "skip" && (
-          <CircleCheck className="mr-1 size-4" />
-        )}
+        {currentSelection && <CircleCheck className="mr-1 size-4" />}
         <SelectValue placeholder="Skip" />
       </SelectTrigger>
       <SelectContent>
