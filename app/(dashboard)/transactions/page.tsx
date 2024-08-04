@@ -54,9 +54,13 @@ const TransactionsPage = () => {
                 <ArrowLeftRight className="mr-2" />
                 Transactions
               </CardTitle>
-              <aside className="flex items-center gap-x-4">
-                <Button onClick={toggleSheet} size="sm">
-                  <Plus className="mr-2 size-4" /> Create new transaction
+              <aside className="flex flex-col items-center gap-y-2 lg:flex-row lg:gap-x-2">
+                <Button
+                  onClick={toggleSheet}
+                  size="sm"
+                  className="w-full lg:w-auto"
+                >
+                  <Plus className="mr-2 size-4" /> Add new
                 </Button>
                 <CsvUploadButton uploadCSV={uploadCSV} />
               </aside>

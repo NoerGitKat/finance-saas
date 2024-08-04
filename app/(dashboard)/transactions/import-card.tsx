@@ -7,7 +7,7 @@ import { useState } from "react";
 // const dateFormat = "yyyy-MM-dd HH:mm:ss";
 // const outputFormat = "yyyy-MM-dd";
 
-// const requiredOptions = ["amount", "date", "receiver"];
+const requiredOptions = ["amount", "receiver", "notes", "date"];
 
 export interface SelectedColumnsState {
   [key: string]: string | null;
@@ -50,6 +50,9 @@ export const ImportCard = ({ data, cancelImport, importFile }: Props) => {
     });
   };
 
+  const importProgression =
+    Object.values(selectedColumns).filter(Boolean).length;
+
   return (
     <Card className="border-none drop-shadow-sm">
       <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
@@ -57,16 +60,23 @@ export const ImportCard = ({ data, cancelImport, importFile }: Props) => {
           <Upload className="mr-2" />
           Import Transaction
         </CardTitle>
-        <aside className="flex items-center gap-x-4">
-          <Button onClick={cancelImport} size="sm" variant="destructive">
+        <aside className="flex flex-col items-center gap-y-2 lg:flex-row lg:gap-x-2">
+          <Button
+            onClick={cancelImport}
+            size="sm"
+            variant="destructive"
+            className="w-full lg:w-auto"
+          >
             <CircleX className="mr-2 size-4" /> Cancel
           </Button>
           <Button
             onClick={() => importFile(data)}
             size="sm"
-            className="bg-emerald-500 hover:bg-emerald-400"
+            className="w-full bg-emerald-500 hover:bg-emerald-400 lg:w-auto"
+            disabled={importProgression !== requiredOptions.length}
           >
-            <CircleCheck className="mr-2 size-4" /> Import
+            <CircleCheck className="mr-2 size-4" /> Import ({importProgression}/
+            {requiredOptions.length})
           </Button>
         </aside>
       </CardHeader>
