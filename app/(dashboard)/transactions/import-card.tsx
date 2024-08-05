@@ -3,9 +3,11 @@ import { CircleCheck, CircleX, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ImportTable } from "./import-table";
 import { useState } from "react";
+import { convertAmountToMiliunits } from "@/lib/utils";
+import { format, parseISO } from "date-fns";
+import { NewTransaction } from "@/db/schema";
 
-// const dateFormat = "yyyy-MM-dd HH:mm:ss";
-// const outputFormat = "yyyy-MM-dd";
+const outputFormat = "yyyy-MM-dd";
 
 const requiredOptions = ["amount", "receiver", "notes", "date"];
 
@@ -16,10 +18,14 @@ export interface SelectedColumnsState {
 type Props = {
   data: string[][];
   cancelImport: () => void;
-  importFile: (data: string[][]) => void;
+  storeTransactionsInDB: (data: NewTransaction[]) => void;
 };
 
-export const ImportCard = ({ data, cancelImport, importFile }: Props) => {
+export const ImportCard = ({
+  data,
+  cancelImport,
+  storeTransactionsInDB,
+}: Props) => {
   const [selectedColumns, setSelectedColumns] = useState<SelectedColumnsState>(
     {},
   );
@@ -53,6 +59,57 @@ export const ImportCard = ({ data, cancelImport, importFile }: Props) => {
   const importProgression =
     Object.values(selectedColumns).filter(Boolean).length;
 
+  const handleImport = () => {
+    const getColumnIndex = (column: string) => {
+      return column.split("_")[1];
+    };
+
+    const mappedData = {
+      headers: headers.map((_header, index) => {
+        const columnIndex = getColumnIndex(`column_${index}`);
+        return selectedColumns[`column_${columnIndex}`];
+      }),
+      body: body
+        .map((row) => {
+          const transformedRow = row.map((cell, index) => {
+            const columnIndex = getColumnIndex(`column_${index}`);
+            return selectedColumns[`column_${columnIndex}`] ? cell : null;
+          });
+
+          return transformedRow.every((item) => item === null)
+            ? []
+            : transformedRow;
+        })
+        .filter((row) => row.length > 0),
+    };
+
+    const dataArray = mappedData.body.map((row) => {
+      return row.reduce(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (acc: any, cell, index) => {
+          const header = mappedData.headers[index];
+
+          if (header !== null && header !== undefined) {
+            acc[header] = cell;
+          }
+
+          return acc;
+        },
+        { notes: "", receiver: "", amount: 0, date: "" },
+      );
+    });
+
+    const formattedData = dataArray.map((transaction) => {
+      return {
+        ...transaction,
+        amount: convertAmountToMiliunits(transaction.amount),
+        date: new Date(format(parseISO(transaction.date), outputFormat)),
+      };
+    });
+
+    storeTransactionsInDB(formattedData);
+  };
+
   return (
     <Card className="border-none drop-shadow-sm">
       <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
@@ -70,7 +127,7 @@ export const ImportCard = ({ data, cancelImport, importFile }: Props) => {
             <CircleX className="mr-2 size-4" /> Cancel
           </Button>
           <Button
-            onClick={() => importFile(data)}
+            onClick={handleImport}
             size="sm"
             className="w-full bg-emerald-500 hover:bg-emerald-400 lg:w-auto"
             disabled={importProgression !== requiredOptions.length}

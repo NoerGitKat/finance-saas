@@ -13,6 +13,7 @@ import { useImportCSV } from "@/hooks";
 import { Variants } from "@/constants/enums";
 import { CsvUploadButton } from "./csv-upload-button";
 import { ImportCard } from "./import-card";
+import { NewTransaction } from "@/db/schema";
 
 const TransactionsPage = () => {
   const { toggleSheet } = useNewTransaction();
@@ -20,13 +21,17 @@ const TransactionsPage = () => {
   const { mutate, isPending } = useBulkDeleteTransactions();
   const { variant, uploadCSV, importResults, cancelImport } = useImportCSV();
 
+  const storeTransactionsInDB = (data: NewTransaction[]) => {
+    console.log("data is", data);
+  };
+
   if (variant === Variants.IMPORT)
     return (
       <section className="mx-auto -mt-24 w-full max-w-screen-2xl pb-10">
         <ImportCard
           data={importResults.data}
           cancelImport={cancelImport}
-          importFile={() => {}}
+          storeTransactionsInDB={storeTransactionsInDB}
         />
       </section>
     );

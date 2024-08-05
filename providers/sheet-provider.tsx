@@ -21,7 +21,7 @@ export const SheetProvider = () => {
       <EditAccountSheet />
       <NewCategorySheet />
       <EditCategorySheet />
-      {id ? <NewTransactionSheet /> : null}
+      <NewTransactionSheet />
       {id ? <EditTransactionSheet /> : null}
     </>
   );

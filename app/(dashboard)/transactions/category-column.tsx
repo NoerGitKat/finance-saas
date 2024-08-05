@@ -1,4 +1,5 @@
 import { useCategory } from "@/features/categories/hooks/use-category";
+import { useNewCategory } from "@/features/categories/hooks/use-new-category";
 import { cn } from "@/lib/utils";
 import { TriangleAlert } from "lucide-react";
 
@@ -9,9 +10,15 @@ type Props = {
 
 export const CategoryColumn = ({ category, categoryId }: Props) => {
   const { openModal } = useCategory();
+  const { toggleSheet } = useNewCategory();
 
   const onClick = () => {
-    if (categoryId) openModal(categoryId);
+    if (categoryId) {
+      openModal(categoryId);
+    } else {
+      // TODO: Select existing or create new
+      toggleSheet();
+    }
   };
   return (
     <div
