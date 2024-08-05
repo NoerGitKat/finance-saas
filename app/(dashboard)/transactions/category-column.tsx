@@ -1,23 +1,27 @@
 import { useCategory } from "@/features/categories/hooks/use-category";
-import { useNewCategory } from "@/features/categories/hooks/use-new-category";
+import { useTransaction } from "@/features/transactions/hooks/use-transaction";
 import { cn } from "@/lib/utils";
 import { TriangleAlert } from "lucide-react";
 
 type Props = {
   category: string;
   categoryId: string | null;
+  transactionId: string;
 };
 
-export const CategoryColumn = ({ category, categoryId }: Props) => {
-  const { openModal } = useCategory();
-  const { toggleSheet } = useNewCategory();
+export const CategoryColumn = ({
+  category,
+  categoryId,
+  transactionId,
+}: Props) => {
+  const categoryModal = useCategory();
+  const transactionModal = useTransaction();
 
   const onClick = () => {
     if (categoryId) {
-      openModal(categoryId);
+      categoryModal.openModal(categoryId);
     } else {
-      // TODO: Select existing or create new
-      toggleSheet();
+      transactionModal.openModal(transactionId);
     }
   };
   return (

@@ -14,20 +14,49 @@ import { Variants } from "@/constants/enums";
 import { CsvUploadButton } from "./csv-upload-button";
 import { ImportCard } from "./import-card";
 import { NewTransaction } from "@/db/schema";
+import { useSelectAccount } from "@/features/accounts/hooks/use-select-account";
+import { toast } from "sonner";
+import useBulkCreateTransactions from "@/features/transactions/api/use-bulk-create-transactions";
 
 const TransactionsPage = () => {
+  const [ConfirmationDialog, confirmAction] = useSelectAccount();
   const { toggleSheet } = useNewTransaction();
-  const { data, isLoading } = useGetTransactions();
-  const { mutate, isPending } = useBulkDeleteTransactions();
+  const transactionsQuery = useGetTransactions();
+  const deleteTransactions = useBulkDeleteTransactions();
+  const createTransactions = useBulkCreateTransactions();
   const { variant, uploadCSV, importResults, cancelImport } = useImportCSV();
 
-  const storeTransactionsInDB = (data: NewTransaction[]) => {
-    console.log("data is", data);
+  const storeTransactionsInDB = async (data: NewTransaction[]) => {
+    try {
+      const accountId = await confirmAction();
+
+      if (!accountId) {
+        return toast.error("Please select an account to continue.");
+      }
+
+      const importedTransactions = data.map((transaction) => {
+        return {
+          ...transaction,
+          accountId,
+        };
+      });
+
+      createTransactions.mutate(importedTransactions, {
+        onSuccess: () => {
+          cancelImport();
+        },
+      });
+    } catch (error) {
+      return toast.error(
+        (error as string) || "Something went wrong. Try again later.",
+      );
+    }
   };
 
   if (variant === Variants.IMPORT)
     return (
       <section className="mx-auto -mt-24 w-full max-w-screen-2xl pb-10">
+        <ConfirmationDialog />
         <ImportCard
           data={importResults.data}
           cancelImport={cancelImport}
@@ -36,12 +65,13 @@ const TransactionsPage = () => {
       </section>
     );
 
-  const isDisabled = isLoading || isPending;
+  const isDisabled =
+    transactionsQuery.isLoading || deleteTransactions.isPending;
 
   return (
     <section className="mx-auto -mt-24 w-full max-w-screen-2xl pb-10">
       <Card className="border-none drop-shadow-sm">
-        {isLoading ? (
+        {transactionsQuery.isLoading ? (
           <>
             <CardHeader>
               <Skeleton className="h-8 w-40" />
@@ -71,16 +101,16 @@ const TransactionsPage = () => {
               </aside>
             </CardHeader>
             <CardContent>
-              {data && (
+              {transactionsQuery.data && (
                 <DataTable
                   columns={columns}
-                  data={data}
+                  data={transactionsQuery.data}
                   filterKey="receiver"
                   onDelete={(row) => {
                     const ids = row.map(
                       (transaction) => transaction.original.id,
                     );
-                    mutate({ ids });
+                    deleteTransactions.mutate({ ids });
                   }}
                   disabled={isDisabled}
                 />

@@ -19,6 +19,8 @@ const useBulkCreateTransactions = () => {
       const response = await client.api.transactions["bulk-create"]["$post"]({
         json,
       });
+
+      if (!response.ok) throw new Error();
       return await response.json();
     },
     onSuccess: () => {
