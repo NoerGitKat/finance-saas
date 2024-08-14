@@ -11,6 +11,7 @@
     "db:generate": "drizzle-kit generate --dialect=postgresql --schema=db/schema --out=./drizzle",
     "db:migrate": "bun ./scripts/migrate.ts",
     "db:studio": "drizzle-kit studio",
+    "db:seed": "bun ./scripts/seed.ts",
     "prepare": "husky install"
   },
   "dependencies": {
