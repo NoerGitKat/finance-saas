@@ -21,7 +21,7 @@ export const NewTransactionSheet = () => {
 
   const defaultValues = {
     receiver: "",
-    amount: "0.00",
+    amount: 0,
     date: new Date(),
     accountId: "",
   };
