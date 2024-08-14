@@ -160,7 +160,7 @@ const app = new Hono().get(
     const days = fillEmptyDays(activeDays, startDate, endDate);
 
     return context.json({
-      data: {
+      summary: {
         currentPeriod: { ...currentPeriod, remaining: currentRemaining },
         lastPeriod: { ...lastPeriod, remaining: lastRemaining },
         changes: { incomeChange, expensesChange, remainingChange },
