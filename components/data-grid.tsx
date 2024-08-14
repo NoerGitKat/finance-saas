@@ -2,9 +2,10 @@
 
 import useGetSummary from "@/features/summary/api/use-get-summary";
 import { formatDateRange } from "@/lib/utils";
-import { Loader2, PiggyBank } from "lucide-react";
+import { PiggyBank, TrendingUp, TrendingDown } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { DataCard } from "./data-card";
+import { DataCardLoading } from "./data-card-loading";
 
 export const DataGrid = () => {
   const params = useSearchParams();
@@ -17,16 +18,38 @@ export const DataGrid = () => {
   return (
     <section className="mb-8 grid grid-cols-1 gap-8 pb-2 lg:grid-cols-3">
       {isLoading ? (
-        <Loader2 className="size-4 animate-spin text-muted-foreground" />
+        <>
+          <DataCardLoading />
+          <DataCardLoading />
+          <DataCardLoading />
+        </>
       ) : (
-        <DataCard
-          title="Remaining"
-          value={data?.currentPeriod.remaining}
-          percentageChange={data?.changes.remainingChange}
-          icon={PiggyBank}
-          variant="default"
-          dateRangeLabel={dateRangeLabel}
-        />
+        <>
+          <DataCard
+            title="Remaining"
+            value={data?.currentPeriod.remaining}
+            percentageChange={data?.changes.remainingChange}
+            icon={PiggyBank}
+            variant="default"
+            dateRangeLabel={dateRangeLabel}
+          />
+          <DataCard
+            title="Income"
+            value={data?.currentPeriod.income}
+            percentageChange={data?.changes.incomeChange}
+            icon={TrendingUp}
+            variant="default"
+            dateRangeLabel={dateRangeLabel}
+          />
+          <DataCard
+            title="Expenses"
+            value={data?.currentPeriod.expenses}
+            percentageChange={data?.changes.expensesChange}
+            icon={TrendingDown}
+            variant="default"
+            dateRangeLabel={dateRangeLabel}
+          />
+        </>
       )}
     </section>
   );

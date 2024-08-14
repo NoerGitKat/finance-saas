@@ -1,4 +1,5 @@
 import { cva, VariantProps } from "class-variance-authority";
+import CountUp from "react-countup";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 import {
   Card,
@@ -7,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency, formatPercentage } from "@/lib/utils";
 import { LucideProps } from "lucide-react";
 
 const boxVariant = cva("shrink-0 rounded-md p-3", {
@@ -73,8 +74,29 @@ export const DataCard = ({
         </div>
       </CardHeader>
       <CardContent>
-        <p>{value}</p>
-        <p>{percentageChange}</p>
+        <h1
+          className={cn(
+            "font-bol mb-2 line-clamp-1 break-all text-2xl",
+            value > 0 ? "text-emerald-500" : "text-rose-500",
+          )}
+        >
+          <CountUp
+            preserveValue
+            start={0}
+            end={value}
+            decimals={2}
+            decimalPlaces={2}
+            formattingFn={formatCurrency}
+          />
+        </h1>
+        <p
+          className={cn(
+            "line-clamp-1 text-sm text-muted-foreground",
+            percentageChange > 0 ? "text-emerald-500" : "text-rose-500",
+          )}
+        >
+          {formatPercentage(percentageChange)} from last period
+        </p>
       </CardContent>
     </Card>
   );

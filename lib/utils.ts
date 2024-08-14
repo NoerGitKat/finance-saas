@@ -26,6 +26,23 @@ export function formatCurrency(value: number, isMiliunit?: boolean) {
   }).format(amount);
 }
 
+export function formatPercentage(
+  value: number,
+  options: { addPrefix?: boolean } = {
+    addPrefix: false,
+  },
+) {
+  const result = new Intl.NumberFormat("en-US", {
+    style: "percent",
+  }).format(value / 100);
+
+  if (options.addPrefix && value > 0) {
+    return `+${result}`;
+  }
+
+  return result;
+}
+
 export function calculatePercentageChange(current: number, previous: number) {
   if (previous === 0) {
     return previous === current ? 0 : 100;
