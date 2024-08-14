@@ -1,5 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
-import { eachDayOfInterval, isSameDay } from "date-fns";
+import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -65,4 +65,24 @@ export function fillEmptyDays(
   });
 
   return transactionsByDay;
+}
+
+type Period = {
+  fromDate: string | Date | undefined;
+  toDate: string | Date | undefined;
+};
+
+export function formatDateRange(period?: Period) {
+  const defaultTo = new Date();
+  const defaultFrom = subDays(defaultTo, 30);
+
+  if (!period?.fromDate) {
+    return `${format(defaultFrom, "LLL dd")} - ${format(defaultTo, "LLL dd, y")}`;
+  }
+
+  if (period.toDate) {
+    return `${format(period.fromDate, "LLL dd")} - ${format(period.toDate, "LLL dd, y")}`;
+  }
+
+  return format(period.fromDate, "LLL dd");
 }
