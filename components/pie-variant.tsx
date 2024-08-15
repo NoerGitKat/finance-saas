@@ -1,7 +1,15 @@
-import { ResponsiveContainer, PieChart, Legend, Pie, Cell } from "recharts";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Legend,
+  Pie,
+  Cell,
+  Tooltip,
+} from "recharts";
 
 import { COLORS } from "@/constants/consts";
 import { formatPercentage } from "@/lib/utils";
+import { CategoryTooltip } from "./category-tooltip";
 
 type Props = {
   data: {
@@ -37,7 +45,10 @@ export const PieVariant = ({ data }: Props) => {
                           {entry.value}
                         </span>
                         <span>
-                          {formatPercentage(entry.payload?.percent * 100)}
+                          {
+                            // TODO: Fix TS error
+                            formatPercentage(entry.payload?.percent * 100)
+                          }
                         </span>
                       </div>
                     </li>
@@ -47,6 +58,7 @@ export const PieVariant = ({ data }: Props) => {
             );
           }}
         />
+        <Tooltip content={<CategoryTooltip />} />
         <Pie
           data={data}
           dataKey="value"
