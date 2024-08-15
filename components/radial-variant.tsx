@@ -1,15 +1,11 @@
+import { COLORS } from "@/constants/consts";
+import { formatCurrency } from "@/lib/utils";
 import {
   ResponsiveContainer,
-  PieChart,
+  RadialBarChart,
   Legend,
-  Pie,
-  Cell,
-  Tooltip,
+  RadialBar,
 } from "recharts";
-
-import { COLORS } from "@/constants/consts";
-import { formatPercentage } from "@/lib/utils";
-import { CategoryTooltip } from "./category-tooltip";
 
 type Props = {
   data: {
@@ -18,13 +14,29 @@ type Props = {
   }[];
 };
 
-export const PieVariant = ({ data }: Props) => {
+export const RadialVariant = ({ data }: Props) => {
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <PieChart>
+      <RadialBarChart
+        cx="50%"
+        cy="30%"
+        barSize={10}
+        innerRadius="90%"
+        outerRadius="40%"
+        data={data.map((item, i) => ({
+          ...item,
+          fill: COLORS[i % COLORS.length],
+        }))}
+      >
+        <RadialBar
+          label={{ fill: "#FFF", position: "insideStart", fontSize: "12px" }}
+          background
+          dataKey="value"
+        />
         <Legend
           layout="horizontal"
           verticalAlign="bottom"
+          align="right"
           iconType="circle"
           content={({ payload }) => {
             return (
@@ -44,10 +56,7 @@ export const PieVariant = ({ data }: Props) => {
                           {entry.value}
                         </span>
                         <span className="text-sm font-semibold">
-                          {
-                            // TODO: Fix TS error
-                            formatPercentage(entry.payload?.percent * 100)
-                          }
+                          {formatCurrency(entry.payload?.value * -1, true)}
                         </span>
                       </div>
                     </li>
@@ -57,23 +66,7 @@ export const PieVariant = ({ data }: Props) => {
             );
           }}
         />
-        <Tooltip content={<CategoryTooltip />} />
-        <Pie
-          data={data}
-          dataKey="value"
-          fill="#8884d8"
-          cx="50%"
-          cy="50%"
-          innerRadius={60}
-          outerRadius={90}
-          paddingAngle={2}
-          labelLine={false}
-        >
-          {data.map((_entry, i) => (
-            <Cell key={`cell_${i}`} fill={COLORS[i % COLORS.length]} />
-          ))}
-        </Pie>
-      </PieChart>
+      </RadialBarChart>
     </ResponsiveContainer>
   );
 };
