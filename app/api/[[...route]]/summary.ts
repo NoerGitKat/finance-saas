@@ -140,7 +140,7 @@ const app = new Hono().get(
             Number,
           ),
         expenses:
-          sql`SUM(CASE WHEN CAST(${transactions.amount} AS INTEGER) < 0 THEN CAST(${transactions.amount} AS INTEGER) ELSE 0 END)`.mapWith(
+          sql`SUM(CASE WHEN CAST(${transactions.amount} AS INTEGER) < 0 THEN ABS(CAST(${transactions.amount} AS INTEGER)) ELSE 0 END)`.mapWith(
             Number,
           ),
       })
