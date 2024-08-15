@@ -38,13 +38,15 @@ const useGetSummary = () => {
           remaining: convertAmountFromMiliunits(summary.lastPeriod.remaining),
         },
         categories: {
-          top: summary.categories.top.map((category) =>
-            convertAmountFromMiliunits(category.value),
-          ),
+          top: summary.categories.top.map((category) => ({
+            name: category.name,
+            value: convertAmountFromMiliunits(category.value),
+          })),
           other: {
             ...summary.categories.other,
             value: convertAmountFromMiliunits(summary.categories.other.value),
           },
+          all: summary.categories.all,
         },
         days: summary.days.map((day) => ({
           ...day,

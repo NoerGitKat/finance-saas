@@ -126,11 +126,17 @@ const app = new Hono().get(
       .orderBy(desc(sql`SUM(ABS(CAST(${transactions.amount} AS INTEGER)))`));
 
     const topCategories = categoryList.slice(0, 3);
+
     const otherCategories = categoryList.slice(3);
     const sumOtherCategories = otherCategories.reduce(
       (sum, current) => sum + current.value,
       0,
     );
+    const allCategories = [...topCategories];
+    allCategories.push({
+      name: "Other",
+      value: sumOtherCategories,
+    });
 
     const activeDays = await db
       .select({
@@ -170,6 +176,7 @@ const app = new Hono().get(
             name: "Other",
             value: sumOtherCategories,
           },
+          all: allCategories,
         },
         days,
       },

@@ -9,3 +9,5 @@ export const INITIAL_IMPORT_RESULTS: ImportResults = {
   errors: [],
   meta: [],
 };
+
+export const COLORS: string[] = ["#0062FF", "#12C6FF", "#FF647F", "#FF9354"];
