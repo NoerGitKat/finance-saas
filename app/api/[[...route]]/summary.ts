@@ -133,10 +133,13 @@ const app = new Hono().get(
       0,
     );
     const allCategories = [...topCategories];
-    allCategories.push({
-      name: "Other",
-      value: sumOtherCategories,
-    });
+
+    if (sumOtherCategories > 0) {
+      allCategories.push({
+        name: "Other",
+        value: sumOtherCategories,
+      });
+    }
 
     const activeDays = await db
       .select({

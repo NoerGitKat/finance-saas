@@ -48,6 +48,7 @@ const useCreateorEditTransaction = (id?: string) => {
       );
       if (id) {
         queryClient.invalidateQueries({ queryKey: ["transaction", { id }] });
+        queryClient.invalidateQueries({ queryKey: ["summary"] });
       }
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
