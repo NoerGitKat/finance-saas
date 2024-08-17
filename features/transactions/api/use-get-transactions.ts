@@ -4,16 +4,16 @@ import { useSearchParams } from "next/navigation";
 
 const useGetTransactions = () => {
   const params = useSearchParams();
-  const fromDate = params.get("fromDate") || "";
-  const toDate = params.get("toDate") || "";
+  const fromDate = params.get("from") || "";
+  const toDate = params.get("to") || "";
   const accountId = params.get("accountId") || "";
 
   const query = useQuery({
     // TODO: Check if params are necessary in key
-    queryKey: ["transactions", { fromDate, toDate, accountId }],
+    queryKey: ["transactions", { from: fromDate, to: toDate, accountId }],
     queryFn: async () => {
       const response = await client.api.transactions.$get({
-        query: { fromDate, toDate, accountId },
+        query: { from: fromDate, to: toDate, accountId },
       });
 
       if (!response.ok) {

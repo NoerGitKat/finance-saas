@@ -10,10 +10,10 @@ import { DataCardLoading } from "./data-card-loading";
 export const DataGrid = () => {
   const params = useSearchParams();
   const { data, isLoading } = useGetSummary();
-  const toDate = params.get("toDate") || undefined;
-  const fromDate = params.get("fromDate") || undefined;
+  const toDate = params.get("to") || undefined;
+  const fromDate = params.get("from") || undefined;
 
-  const dateRangeLabel = formatDateRange({ toDate, fromDate });
+  const dateRangeLabel = formatDateRange({ to: toDate, from: fromDate });
 
   return (
     <section className="mb-8 grid grid-cols-1 gap-8 pb-2 lg:grid-cols-3">

@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 
 const useGetSummary = () => {
   const params = useSearchParams();
-  const fromDate = params.get("fromDate") || "";
-  const toDate = params.get("toDate") || "";
+  const fromDate = params.get("from") || "";
+  const toDate = params.get("to") || "";
   const accountId = params.get("accountId") || "";
 
   const query = useQuery({

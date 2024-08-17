@@ -16,26 +16,24 @@ const app = new Hono()
     zValidator(
       "query",
       z.object({
-        fromDate: z.string().optional(),
-        toDate: z.string().optional(),
+        from: z.string().optional(),
+        to: z.string().optional(),
         accountId: z.string().optional(),
       }),
     ),
     async (context) => {
       const auth = getAuth(context);
-      const { fromDate, toDate, accountId } = context.req.valid("query");
+      const { from, to, accountId } = context.req.valid("query");
 
       if (!auth?.userId) return context.json({ error: "Unauthorized" }, 401);
 
-      const defaultToDate = new Date();
-      const defaultFromDate = subDays(defaultToDate, 30);
+      const defaultTo = new Date();
+      const defaultFrom = subDays(defaultTo, 30);
 
-      const startDate = fromDate
-        ? parse(fromDate, "yyyy-MM-dd", new Date())
-        : defaultFromDate;
-      const endDate = toDate
-        ? parse(toDate, "yyyy-MM-dd", new Date())
-        : defaultToDate;
+      const startDate = from
+        ? parse(from, "yyyy-MM-dd", new Date())
+        : defaultFrom;
+      const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultTo;
 
       const data = await db
         .select({

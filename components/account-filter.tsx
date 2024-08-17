@@ -10,6 +10,7 @@ import {
 } from "./ui/select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
+import useGetSummary from "@/features/summary/api/use-get-summary";
 
 export const AccountFilter = () => {
   const router = useRouter();
@@ -17,10 +18,11 @@ export const AccountFilter = () => {
 
   const params = useSearchParams();
   const accountId = params.get("accountId") || "all";
-  const fromDate = params.get("fromDate") || "";
-  const toDate = params.get("toDate") || "";
+  const fromDate = params.get("from") || "";
+  const toDate = params.get("to") || "";
 
-  const { data, isLoading } = useGetAccounts();
+  const { data, isLoading: isLoadingAccounts } = useGetAccounts();
+  const { isLoading: isLoadingSummary } = useGetSummary();
 
   const selectAccount = (option: string) => {
     const query = {
@@ -48,7 +50,7 @@ export const AccountFilter = () => {
     <Select
       value={accountId}
       onValueChange={selectAccount}
-      disabled={isLoading}
+      disabled={isLoadingAccounts || isLoadingSummary}
     >
       <SelectTrigger className="h-9 w-full rounded-md border-none bg-white/10 px-3 font-normal text-white outline-none transition hover:bg-white/20 hover:text-white focus:bg-white/30 focus:ring-transparent focus:ring-offset-0 lg:w-auto">
         <SelectValue placeholder="Select account" />
