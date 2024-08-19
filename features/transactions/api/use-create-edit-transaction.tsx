@@ -48,9 +48,9 @@ const useCreateorEditTransaction = (id?: string) => {
       );
       if (id) {
         queryClient.invalidateQueries({ queryKey: ["transaction", { id }] });
-        queryClient.invalidateQueries({ queryKey: ["summary"] });
       }
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: () => {
       toast.error(`Couldn't ${id ? "edit" : "create"} transaction...`, {

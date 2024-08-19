@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 
 const useGetTransaction = (id?: string) => {
   const query = useQuery({
-    // TODO: Check if params are necessary in key
     queryKey: ["transaction", { id }],
     queryFn: async () => {
       const response = await client.api.transactions[":id"].$get({

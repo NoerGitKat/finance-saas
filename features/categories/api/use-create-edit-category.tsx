@@ -46,6 +46,7 @@ const useCreateOrEditCategory = (id?: string) => {
       }
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: () => {
       toast.error(`Couldn't ${id ? "edit" : "create"} category...`, {

@@ -10,6 +10,7 @@ import {
 import { COLORS } from "@/constants/consts";
 import { formatPercentage } from "@/lib/utils";
 import { CategoryTooltip } from "./category-tooltip";
+import { Payload } from "recharts/types/component/DefaultLegendContent";
 
 type Props = {
   data: {
@@ -29,25 +30,25 @@ export const PieVariant = ({ data }: Props) => {
           content={({ payload }) => {
             return (
               <ul className="flex flex-col space-y-2">
-                {payload?.map((entry, i) => {
+                {payload?.map((entry, index) => {
+                  const typedEntry = entry as Payload & {
+                    payload: { percent: number };
+                  };
                   return (
                     <li
-                      key={`item_${i}`}
+                      key={`item_${index}`}
                       className="flex items-center gap-1 text-xs"
                     >
                       <span
                         className="size-2 rounded-full"
-                        style={{ backgroundColor: entry.color }}
+                        style={{ backgroundColor: typedEntry.color }}
                       />
                       <div className="space-x-1">
                         <span className="text-sm text-muted-foreground">
-                          {entry.value}
+                          {typedEntry.value}
                         </span>
                         <span className="text-sm font-semibold">
-                          {
-                            // TODO: Fix TS error
-                            formatPercentage(entry.payload?.percent * 100)
-                          }
+                          {formatPercentage(typedEntry.payload?.percent * 100)}
                         </span>
                       </div>
                     </li>

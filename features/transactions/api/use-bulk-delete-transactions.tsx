@@ -26,7 +26,7 @@ const useBulkDeleteTransactions = () => {
         icon: <CircleCheck color="green" />,
       });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      // TODO: Also invalidate summary
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: () => {
       toast.error("Couldn't delete transaction(s)...", {

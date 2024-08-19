@@ -26,7 +26,7 @@ const useBulkDelete = () => {
         icon: <CircleCheck color="green" />,
       });
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
-      // TODO: Also invalidate summary
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: () => {
       toast.error("Couldn't delete account(s)...", {
