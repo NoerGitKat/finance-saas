@@ -39,4 +39,5 @@ export type Transaction = typeof transactions.$inferSelect & {
   account: string;
   category: string;
 };
+
 export type NewTransaction = typeof transactions.$inferInsert;

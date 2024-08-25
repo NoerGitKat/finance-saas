@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Transaction } from "@/db/schema";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
@@ -11,8 +10,15 @@ import { formatCurrency } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { AccountColumn } from "./account-column";
 import { CategoryColumn } from "./category-column";
+import { InferResponseType } from "hono";
+import { client } from "@/lib/hono";
 
-export const columns: ColumnDef<Transaction>[] = [
+export type ResponseType = InferResponseType<
+  typeof client.api.transactions.$get,
+  200
+>["transactions"][0];
+
+export const columns: ColumnDef<ResponseType>[] = [
   {
     id: "transactions",
     header: ({ table }) => (
