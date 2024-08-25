@@ -83,7 +83,7 @@ export const columns: ColumnDef<ResponseType>[] = [
       return (
         <CategoryColumn
           transactionId={row.original.id}
-          category={row.original.category}
+          category={row.original.category || ""}
           categoryId={row.original.categoryId}
         />
       );
